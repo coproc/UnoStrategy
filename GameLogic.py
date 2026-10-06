@@ -30,6 +30,12 @@ class CardValue(Enum):
     PLUS4 = auto()
     NEW_COLOR = auto()
 
+    def __str__(self):
+        if 0 <= self.value <= 9:
+            return str(self.value)
+        return self.name
+
+
 CARD_VALUES_ONE_TO_NINE = [CardValue(val) for val in range(1,10)]
 CARD_VALUES_ACTION = [CardValue.REVERSE, CardValue.SKIP, CardValue.PLUS2]
 CARD_VALUES_SPECIAL = [CardValue.NEW_COLOR, CardValue.PLUS4]
@@ -40,7 +46,10 @@ class Card:
     value: CardValue
 
     def __str__(self):
-        return f"{self.color.name} {self.value.name}"
+        if self.color == CardColor.SPECIAL:
+            return f"{self.value}"
+        return f"{self.color.name}-{self.value}"
+
 
 def flatten_list(nested_list: list[list]) -> list:
     return sum(nested_list, [])
@@ -133,6 +142,13 @@ class GameStateBase:
             case _:
                 raise RuntimeError(f"unhandled move '{move}' of type {type(move)}")
 
+    def __str__(self):
+        expected_str = f"expected {self.expected_color.name}"
+        if self.expected_value is not None:
+            expected_str += " or " + str(self.expected_value)
+        reversed_str = ", reversed" if self.reversed else ""
+        return expected_str + reversed_str
+
 
 @dataclass
 class GameState:
@@ -212,7 +228,7 @@ class Game:
 
     def run(self):
         while not self.game_state.is_game_over():
-            print("expected: ", self.game_state.game_state_base.expected_color, self.game_state.game_state_base.expected_value)
+            print(self.game_state.game_state_base)
             game_state_public = GameStatePublic.from_state(self.game_state)
             current_player = self.game_state.current_player()
             print(current_player)
@@ -222,7 +238,10 @@ class Game:
                 print("  invalid move, must draw a card")
                 move = DrawCard()
             self.play(current_player, move)
-            print("  now holds ", ', '.join([str(card) for card in current_player.hand]))
+            if len(current_player.hand) > 0:
+                print("  now holds ", ', '.join([str(card) for card in current_player.hand]))
+            else:
+                print("  done")
 
     def play(self, player:Player, move: Move):
         match move:
