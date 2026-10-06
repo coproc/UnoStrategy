@@ -227,8 +227,10 @@ class Game:
         return self.unplayed_cards.pop()
 
     def run(self):
+        round_count = 0
         while not self.game_state.is_game_over():
-            print(self.game_state.game_state_base)
+            round_count += 1
+            print(f"round {round_count}: {self.game_state.game_state_base}")
             game_state_public = GameStatePublic.from_state(self.game_state)
             current_player = self.game_state.current_player()
             print(current_player)
