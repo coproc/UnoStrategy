@@ -75,7 +75,7 @@ class PlayColorChoiceCard(PlayCard):
     new_color: CardColor
 
     def __str__(self):
-        return (f"{super()} as {self.new_color}")
+        return f"play {self.card} as {self.new_color}"
 
 Move = DrawCard | PlayCard | PlayColorChoiceCard
 
@@ -91,7 +91,7 @@ class Player:
 @dataclass(slots=True)
 class GameStateBase:
     reversed: bool = False
-    expected_color: CardColor = CardColor.RED
+    expected_color: CardColor | None = None
     expected_value: CardValue | None = None
 
     def update_expectation(self, data: Move | Card) -> None:
@@ -198,9 +198,10 @@ class Game:
             assert len(self.unplayed_cards) >= CARD_COUNT_START, f"not enough cards to start with"
             player.hand = self.unplayed_cards[:CARD_COUNT_START]
             self.unplayed_cards = self.unplayed_cards[len(player.hand):]
-        open_card = self.next_card()
-        self.game_state.update_from_card(open_card)
-        self.played_cards.append(open_card)
+        while self.game_state.game_state_base.expected_color is None:
+            open_card = self.next_card()
+            self.game_state.update_from_card(open_card)
+            self.played_cards.append(open_card)
 
     def next_card(self) -> Card:
         if not self.unplayed_cards:
