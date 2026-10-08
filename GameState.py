@@ -87,15 +87,17 @@ class GameStateBase:
 @dataclass
 class GameState:
     players: tuple[Player, ...]
-    turn_index: int = -1
+    turn_index: int = 0
     game_state_base: GameStateBase = field(default_factory=GameStateBase)
 
-    def current_player(self) -> Player:
+    def move_turn(self):
         for _ in range(len(self.players)-1):
             play_dir_incr = 1 if not self.game_state_base.reversed else -1
             self.turn_index = (self.turn_index + play_dir_incr) % len(self.players)
             if len(self.players[self.turn_index].hand) > 0:
                 break
+
+    def current_player(self) -> Player:
         return self.players[self.turn_index]
 
     def update_from_card(self, card: Card):

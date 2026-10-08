@@ -76,8 +76,9 @@ class Game:
                 self.game_state.game_state_base.update_from_move( move)
             case _:
                 raise RuntimeError(f"unhandled move '{move}' of type {type(move)}")
+        self.game_state.move_turn()
 
 
 if __name__ == "__main__":
-    game = Game((AIPlayer("Player 1"),))
+    game = Game((AIPlayer("Player 1"),AIPlayer("Player 2")))
     game.run()
