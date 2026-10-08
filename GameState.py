@@ -90,15 +90,24 @@ class GameState:
     turn_index: int = 0
     game_state_base: GameStateBase = field(default_factory=GameStateBase)
 
-    def move_turn(self):
+    def next_turn(self):
+        next_turn_index = self.turn_index
         for _ in range(len(self.players)-1):
             play_dir_incr = 1 if not self.game_state_base.reversed else -1
-            self.turn_index = (self.turn_index + play_dir_incr) % len(self.players)
-            if len(self.players[self.turn_index].hand) > 0:
+            next_turn_index += play_dir_incr
+            next_turn_index %= len(self.players)
+            if len(self.players[next_turn_index].hand) > 0:
                 break
+        return next_turn_index
+
+    def move_turn(self):
+        self.turn_index = self.next_turn()
 
     def current_player(self) -> Player:
         return self.players[self.turn_index]
+
+    def next_player(self) -> Player:
+        return self.players[self.next_turn()]
 
     def update_from_card(self, card: Card):
         self.game_state_base.update_from_card(card)

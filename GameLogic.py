@@ -47,10 +47,10 @@ class Game:
         return self.unplayed_cards.pop()
 
     def run(self):
-        round_count = 0
+        turn_count = 0
         while not self.game_state.is_game_over():
-            round_count += 1
-            print(f"round {round_count}: {self.game_state.game_state_base}")
+            turn_count += 1
+            print(f"turn {turn_count}: {self.game_state.game_state_base}")
             game_state_public = GameStatePublic.from_state(self.game_state)
             current_player = self.game_state.current_player()
             print(current_player)
@@ -73,7 +73,17 @@ class Game:
             case PlayCard(card=card):
                 player.hand.remove(card)
                 self.played_cards.append(card)
-                self.game_state.game_state_base.update_from_move( move)
+                self.game_state.game_state_base.update_from_move(move)
+                if card.value in (CardValue.PLUS2, CardValue.PLUS4):
+                    next_player = self.game_state.next_player()
+                    card_count = 2 if card.value == CardValue.PLUS2 else 4
+                    print(next_player.name, "draws", card_count, "cards")
+                    for _ in range(card_count):
+                        next_player.hand.append(self.next_card())
+                if card.value == CardValue.SKIP or (
+                        len(self.game_state.players) == 2 and card.value == CardValue.REVERSE):
+                    self.game_state.move_turn()
+                    print(player.name, "skipped")
             case _:
                 raise RuntimeError(f"unhandled move '{move}' of type {type(move)}")
         self.game_state.move_turn()
