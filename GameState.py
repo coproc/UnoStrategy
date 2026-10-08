@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto
 
+from aux_list import flatten_list, split_at_index
+
 CARD_COUNT_START = 7
 
 class CardColor(Enum):
@@ -49,12 +51,6 @@ class Card:
             return f"{self.value}"
         return f"{self.color.name}-{self.value}"
 
-
-def flatten_list(nested_list: list[list]) -> list:
-    return sum(nested_list, [])
-
-def split_at_index(data: list|tuple, index: int) -> tuple[list|tuple, list|tuple]:
-    return data[:index], data[index:]
 
 UNO_DECK = flatten_list(
     [
