@@ -1,5 +1,8 @@
 from random import shuffle
-from GameState import GameState, GameStatePublic, Player, Move, DrawCard, PlayCard, PlayColorChoiceCard, Card, CardValue, CardColor, UNO_DECK, CARD_COUNT_START
+from GameState import GameState, GameStatePublic, Player, Move, DrawCard, PlayCard, PlayColorChoiceCard
+from UnoDeck import UNO_DECK, Card, CardValue, CardColor
+
+CARD_COUNT_START = 7
 
 class AIPlayer(Player):
     def play(self, game_state: GameStatePublic) -> Move:
