@@ -4,6 +4,7 @@ from UnoDeck import UNO_DECK, Card, CardValue, CardColor
 
 CARD_COUNT_START = 7
 
+
 class AIPlayer(Player):
     def play(self, game_state: GameStatePublic) -> Move:
         for card in self.hand:
@@ -75,7 +76,6 @@ class Game:
                 self.game_state.game_state_base.update_from_move( move)
             case _:
                 raise RuntimeError(f"unhandled move '{move}' of type {type(move)}")
-
 
 
 if __name__ == "__main__":
