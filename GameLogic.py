@@ -46,7 +46,7 @@ class Game:
             shuffle(self.unplayed_cards)
         return self.unplayed_cards.pop()
 
-    def run(self):
+    def run(self, turn_count_max: int = 1000):
         turn_count = 0
         players_done = []
         while not self.game_state.is_game_over() and turn_count < turn_count_max:
