@@ -46,12 +46,13 @@ def run_tournament_with_single_AIPlayers(players, runCount: int = 100):
 if __name__ == "__main__":
   run_tournament_with_single_AIPlayers(AIPLAYERS)
 """
-fschmidb: 57.0
-cseiler: 58.0
-pplatzer: 59.0
-lmilicev: 75.0
-sthurner: 87.0
-mraschk1: 92.0
-fobermay: 115.0
-lkreisma: 127.0
-mstuebl: 501.0"""
+mstuebl: 34.0
+pplatzer: 63.0
+cseiler: 65.0
+fschmidb: 65.0
+lmilicev: 70.0
+sthurner: 71.0
+lkreisma: 115.0
+mraschk1: 119.0
+fobermay: 147.0
+"""

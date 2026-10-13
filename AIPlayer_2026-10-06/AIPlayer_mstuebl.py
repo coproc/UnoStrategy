@@ -44,7 +44,9 @@ class AIPlayer(Player):
 
         if len(card_avalible_to_play) > 1:
             card_to_hold = self.getbestcardtohold(card_avalible_to_play)
-            best_cards_to_play = [card for card in card_avalible_to_play if card != card_to_hold]
+            best_cards_to_play = card_avalible_to_play.copy()
+            if card_to_hold is not None:
+                best_cards_to_play.remove(card_to_hold)
             best_cards_to_play.sort(key=lambda card: card.value.value, reverse=True)
             return best_cards_to_play[0]
         elif len(card_avalible_to_play) == 1:
