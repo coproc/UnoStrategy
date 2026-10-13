@@ -113,6 +113,8 @@ class GameState:
         self.game_state_base.update_from_card(card)
 
     def is_move_valid(self, hand:list, move: Move):
+        if move is None or not isinstance(move, Move):
+            return False
         return self.game_state_base.is_move_valid(hand, move)
 
     def is_game_over(self) -> bool:
