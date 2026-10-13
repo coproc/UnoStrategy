@@ -48,7 +48,8 @@ class Game:
 
     def run(self):
         turn_count = 0
-        while not self.game_state.is_game_over():
+        players_done = []
+        while not self.game_state.is_game_over() and turn_count < turn_count_max:
             turn_count += 1
             print(f"turn {turn_count}: {self.game_state.game_state_base}")
             game_state_public = GameStatePublic.from_state(self.game_state)
@@ -64,6 +65,8 @@ class Game:
                 print("  now holds ", ', '.join([str(card) for card in current_player.hand]))
             else:
                 print("  done")
+                players_done.append((current_player, turn_count))
+        return players_done
 
     def play(self, player:Player, move: Move):
         match move:
