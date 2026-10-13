@@ -55,8 +55,13 @@ class Game:
             game_state_public = GameStatePublic.from_state(self.game_state)
             current_player = self.game_state.current_player()
             print(current_player)
-            move = current_player.play(game_state_public)
-            print("  tries ", move)
+            try:
+                move = current_player.play(game_state_public)
+                print("  tries ", move)
+            except Exception as exc:
+                print(f"  error generating move ('{type(exc)}'): ", exc)
+                move = DrawCard()
+                print("  must draw a card")
             if not self.game_state.is_move_valid(current_player.hand, move):
                 print("  invalid move, must draw a card")
                 move = DrawCard()
