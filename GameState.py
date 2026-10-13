@@ -123,9 +123,20 @@ class GameState:
 
 @dataclass(slots=True)
 class GameStatePublic:
-    hand_sizes: tuple[int, ...]
+    hand_sizes_of_other_players: tuple[int, ...]
     game_state_base: GameStateBase = field(default_factory=GameStateBase)
+
+    @staticmethod
+    def other_hand_sizes(state: GameState) -> tuple[int, ...]:
+        next_turn_index = state.turn_index
+        play_dir_incr = 1 if not state.game_state_base.reversed else -1
+        hand_sizes = []
+        for _ in range(len(state.players)-1):
+            next_turn_index += play_dir_incr
+            next_turn_index %= len(state.players)
+            hand_sizes.append(len(state.players[next_turn_index].hand))
+        return tuple(hand_sizes)
 
     @classmethod
     def from_state(cls, state:GameState):
-        return cls(game_state_base=state.game_state_base, hand_sizes=tuple(len(player.hand) for player in state.players))
+        return cls(game_state_base=state.game_state_base, hand_sizes_of_other_players=GameStatePublic.other_hand_sizes(state))
