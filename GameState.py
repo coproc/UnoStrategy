@@ -92,8 +92,8 @@ class GameState:
 
     def next_turn(self):
         next_turn_index = self.turn_index
+        play_dir_incr = 1 if not self.game_state_base.reversed else -1
         for _ in range(len(self.players)-1):
-            play_dir_incr = 1 if not self.game_state_base.reversed else -1
             next_turn_index += play_dir_incr
             next_turn_index %= len(self.players)
             if len(self.players[next_turn_index].hand) > 0:
