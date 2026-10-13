@@ -1,4 +1,5 @@
 import logging
+from collections import defaultdict
 from pathlib import Path
 from random import shuffle
 from GameState import GameState, GameStatePublic, Player, Move, DrawCard, PlayCard, PlayColorChoiceCard
@@ -52,7 +53,7 @@ class Game:
         players_str = ', '.join([pl.name for pl in self.game_state.players])
         logging.info(f"starting game with {players_str}")
         turn_count = 0
-        players_done = []
+        players_done = {}
         pre_play_msg = None
         while not self.game_state.is_game_over() and turn_count < turn_count_max:
             if pre_play_msg:
@@ -77,7 +78,7 @@ class Game:
                 logging.info(f"  now holds {hand_str}")
             else:
                 logging.info("  done")
-                players_done.append((current_player, turn_count))
+                players_done[current_player.idx] = turn_count
         return players_done
 
     def play(self, player:Player, move: Move) -> str:
@@ -121,7 +122,13 @@ _initializeLogger()
 
 if __name__ == "__main__":
     players = AIPlayer("Player 1"),AIPlayer("Player 2")
+    for idx, player in enumerate(players):
+        player.idx = idx
     game = Game(players)
     players_done = game.run()
-    players_done_str = ', '.join([f"{pl.name}: {turn_done}" for pl, turn_done in players_done])
+    players_done_sorted = sorted([
+        (players[pl_idx].name,turn_done)
+        for pl_idx, turn_done in players_done.items()],
+        key=lambda x: x[1])
+    players_done_str = ', '.join([f"{name}: {turn_done}" for name, turn_done in players_done_sorted])
     logging.info(f"players done: {players_done_str}")
