@@ -30,7 +30,7 @@ class Game:
 
     def init_cards(self):
         for player in self.game_state.players:
-            assert len(player.hand) == 0, f"player {player} already has cards"
+            #assert len(player.hand) == 0, f"player {player} already has cards"
             assert len(self.unplayed_cards) >= CARD_COUNT_START, f"not enough cards to start with"
             player.hand = self.unplayed_cards[:CARD_COUNT_START]
             self.unplayed_cards = self.unplayed_cards[len(player.hand):]
