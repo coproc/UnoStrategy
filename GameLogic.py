@@ -115,7 +115,7 @@ def _initializeLogger():
     logging.basicConfig(filename=SCRIPT_DIR / f"{APP_NAME}.log",
         format="%(asctime)-15s\t%(levelname)s\t%(message)s",
         level=logging.DEBUG)
-    logging.getLogger().addHandler(logging.StreamHandler())
+    #logging.getLogger().addHandler(logging.StreamHandler())
 
 
 _initializeLogger()
